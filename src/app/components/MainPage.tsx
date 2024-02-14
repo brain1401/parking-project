@@ -36,7 +36,7 @@ export default function MainPage() {
   }, [error, latitude, longitude]);
 
   const visibleMarkers = useMemo(() => {
-    if (!parkingLotsResponse || !currentCenter.lat || !currentCenter.lng)
+    if (!parkingLotsResponse)
       return [];
 
     return parkingLotsResponse?.parkingInfoList.map((parkingLot) => {
@@ -56,7 +56,7 @@ export default function MainPage() {
         );
       }
     });
-  }, [parkingLotsResponse, currentCenter.lat, currentCenter.lng]);
+  }, [parkingLotsResponse]);
 
   return (
     <div className="h-full flex flex-col">
