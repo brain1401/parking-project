@@ -36,11 +36,36 @@ export default function MainPage() {
   }, [error, latitude, longitude]);
 
   const visibleMarkers = useMemo(() => {
-    if (!parkingLotsResponse)
-      return [];
+    if (!parkingLotsResponse) return null;
 
-    return parkingLotsResponse?.parkingInfoList.map((parkingLot) => {
-      if (parkingLot.lat && parkingLot.lng) {
+    const rangeInKm = 1.5; // 중심점으로부터 5km 내의 마커만 표시
+
+    return parkingLotsResponse?.parkingInfoList
+      .filter((parkingLot) => {
+        if (
+          !currentCenter.lat ||
+          !currentCenter.lng ||
+          !parkingLot.lat ||
+          !parkingLot.lng
+        )
+          return false;
+        const distance = calculateDistance(
+          currentCenter.lat,
+          currentCenter.lng,
+          parseFloat(parkingLot.lat),
+          parseFloat(parkingLot.lng)
+        );
+        return distance <= rangeInKm;
+      })
+      .map((parkingLot) => {
+        if (
+          !currentCenter.lat ||
+          !currentCenter.lng ||
+          !parkingLot.lat ||
+          !parkingLot.lng
+        )
+          return false;
+
         return (
           <CustomOverlayMap
             key={parkingLot.parkingCode}
@@ -49,14 +74,18 @@ export default function MainPage() {
               lng: parseFloat(parkingLot.lng),
             }}
           >
-            <div className="flex justify-center items-center w-[5rem] h-[2rem] translate-y-[-50%] bg-slate-200">
-              {parkingLot.rates}
+            <div className="flex flex-col translate-y-[-25%]">
+              <div className="flex justify-center items-center z-10 bg-neutral-300 w-[8rem] h-[2.5rem] text-sm rounded-md">
+                {`기본요금 : ${
+                  parkingLot.rates === "무료" ? "무료" : `${parkingLot.rates}원`
+                }`}
+              </div>
+              <div className="w-8 h-8 rotate-45 translate-y-[-1.6rem] bg-neutral-300 self-center"></div>
             </div>
           </CustomOverlayMap>
         );
-      }
-    });
-  }, [parkingLotsResponse]);
+      });
+  }, [parkingLotsResponse, currentCenter.lat, currentCenter.lng]);
 
   return (
     <div className="h-full flex flex-col">
@@ -72,6 +101,7 @@ export default function MainPage() {
           const center = map.getCenter();
           setCurrentCenter({ lat: center.getLat(), lng: center.getLng() });
         }}
+        minLevel={4}
       >
         <MarkerClusterer averageCenter={true} minLevel={3}>
           {visibleMarkers}
