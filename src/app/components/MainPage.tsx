@@ -16,9 +16,6 @@ export default function MainPage() {
     lat: null,
     lng: null,
   });
-
-  const { error, latitude, longitude } = useLocation();
-
   const [map, setMap] = useState<kakao.maps.Map>();
 
   const {
@@ -28,14 +25,23 @@ export default function MainPage() {
   } = useGetParkingLot();
 
   useEffect(() => {
-    // 사용자의 위치 정보가 유효할 때만 currentCenter 상태를 업데이트
-    if (latitude && longitude) {
-      setCurrentCenter({
-        lat: latitude,
-        lng: longitude,
-      });
+    if (!navigator.geolocation) {
+      alert("현재 위치를 가져올 수 없습니다.");
+      return;
     }
-  }, [latitude, longitude]); // latitude와 longitude가 변경될 때마다 실행
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        setCurrentCenter({
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+        });
+      },
+      () => {
+        alert("현재 위치를 가져올 수 없습니다.");
+      }
+    );
+  }, []);
 
   const visibleMarkers = useMemo(() => {
     if (!parkingLotsResponse) return null;
@@ -52,6 +58,7 @@ export default function MainPage() {
           parkingLot.rates === null
         )
           return false;
+
         const distance = calculateDistance(
           currentCenter.lat,
           currentCenter.lng,
@@ -67,7 +74,7 @@ export default function MainPage() {
           !parkingLot.lat ||
           !parkingLot.lng
         )
-          return false;
+          return null;
 
         return (
           <CustomOverlayMap
@@ -88,17 +95,21 @@ export default function MainPage() {
           </CustomOverlayMap>
         );
       });
-  }, [parkingLotsResponse, currentCenter.lat, currentCenter.lng]);
+  }, [parkingLotsResponse, currentCenter]);
+
+  useEffect(() => {
+    console.log("visibleMarkers : ", visibleMarkers);
+  }, [visibleMarkers]);
 
   return (
     <div className="h-full flex flex-col">
       <ParkSearchBox map={map} />
 
-      <div className="w-[80%] h-[80%] self-center  relative overflow-hidden">
+      <div className="w-[80%] h-[80%] self-center relative overflow-hidden">
         <Map
           center={{
-            lat: latitude ?? 35.1599785,
-            lng: longitude ?? 126.8513072,
+            lat: currentCenter.lat ?? 35.1599785,
+            lng: currentCenter.lng ?? 126.8513072,
           }}
           className="h-full w-full"
           onCenterChanged={(map) => {
@@ -108,9 +119,7 @@ export default function MainPage() {
           minLevel={4}
           onCreate={setMap}
         >
-          <MarkerClusterer averageCenter={true} minLevel={3}>
-            {visibleMarkers}
-          </MarkerClusterer>
+          {visibleMarkers}
         </Map>
         <button
           className="absolute bg-blue-600 opacity-90 text-white bottom-1 right-1 z-10 px-2 py-2 rounded-md"
@@ -122,12 +131,6 @@ export default function MainPage() {
 
             navigator.geolocation.getCurrentPosition(
               (position) => {
-                map?.setCenter(
-                  new kakao.maps.LatLng(
-                    position.coords.latitude,
-                    position.coords.longitude
-                  )
-                );
                 setCurrentCenter({
                   lat: position.coords.latitude,
                   lng: position.coords.longitude,
