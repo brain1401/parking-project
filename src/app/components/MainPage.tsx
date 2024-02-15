@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { BiCurrentLocation } from "react-icons/bi";
 import ParkSearchBox from "./ParkSearchBox";
-import useDebounce from "@/hooks/useDebounce";
 import { Map, CustomOverlayMap, MarkerClusterer } from "react-kakao-maps-sdk";
 import useLocation from "@/hooks/useLocation";
 import useGetParkingLot from "@/hooks/useGetParkingLot";
@@ -94,20 +94,50 @@ export default function MainPage() {
     <div className="h-full flex flex-col">
       <ParkSearchBox map={map} />
 
-      <Map
-        center={{ lat: latitude ?? 35.1599785, lng: longitude ?? 126.8513072 }}
-        className="w-[80%] h-[80%] mx-auto"
-        onCenterChanged={(map) => {
-          const center = map.getCenter();
-          setCurrentCenter({ lat: center.getLat(), lng: center.getLng() });
-        }}
-        minLevel={4}
-        onCreate={setMap}
-      >
-        <MarkerClusterer averageCenter={true} minLevel={3}>
-          {visibleMarkers}
-        </MarkerClusterer>
-      </Map>
+      <div className="w-[80%] h-[80%] self-center  relative overflow-hidden">
+        <Map
+          center={{
+            lat: latitude ?? 35.1599785,
+            lng: longitude ?? 126.8513072,
+          }}
+          className="h-full w-full"
+          onCenterChanged={(map) => {
+            const center = map.getCenter();
+            setCurrentCenter({ lat: center.getLat(), lng: center.getLng() });
+          }}
+          minLevel={4}
+          onCreate={setMap}
+        >
+          <MarkerClusterer averageCenter={true} minLevel={3}>
+            {visibleMarkers}
+          </MarkerClusterer>
+        </Map>
+        <button
+          className="absolute bg-blue-600 opacity-90 text-white bottom-1 right-1 z-10 px-2 py-2 rounded-md"
+          onClick={() => {
+            if (!navigator.geolocation) {
+              alert("현재 위치를 가져올 수 없습니다.");
+              return;
+            }
+
+            navigator.geolocation.getCurrentPosition(
+              (position) => {
+                map?.setCenter(
+                  new kakao.maps.LatLng(
+                    position.coords.latitude,
+                    position.coords.longitude
+                  )
+                );
+              },
+              () => {
+                alert("현재 위치를 가져올 수 없습니다.");
+              }
+            );
+          }}
+        >
+          <BiCurrentLocation className="w-5 h-5" />
+        </button>
+      </div>
     </div>
   );
 }
