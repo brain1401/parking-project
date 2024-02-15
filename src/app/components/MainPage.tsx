@@ -111,6 +111,7 @@ export default function MainPage() {
             lat: currentCenter.lat ?? 35.1599785,
             lng: currentCenter.lng ?? 126.8513072,
           }}
+          
           className="h-full w-full"
           onCenterChanged={(map) => {
             const center = map.getCenter();
@@ -119,7 +120,9 @@ export default function MainPage() {
           minLevel={4}
           onCreate={setMap}
         >
-          {visibleMarkers}
+          <MarkerClusterer averageCenter={true} minLevel={3}>
+            {visibleMarkers}
+          </MarkerClusterer>
         </Map>
         <button
           className="absolute bg-blue-600 opacity-90 text-white bottom-1 right-1 z-10 px-2 py-2 rounded-md"
