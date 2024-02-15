@@ -49,7 +49,7 @@ export default function MainPage() {
           !currentCenter.lng ||
           !parkingLot.lat ||
           !parkingLot.lng ||
-          parkingLot.rates === "null"
+          parkingLot.rates === null
         )
           return false;
         const distance = calculateDistance(
@@ -78,11 +78,11 @@ export default function MainPage() {
             }}
           >
             <div className="flex flex-col translate-y-[-25%] select-none">
-              <div className="flex justify-center items-center z-10 bg-neutral-300 px-2 h-[2.5rem] text-sm rounded-md">
+              <h2 className="flex justify-center items-center z-10 bg-neutral-300 px-2 h-[2.5rem] text-sm rounded-md">
                 {`기본요금 : ${
                   parkingLot.rates === "무료" ? "무료" : `${parkingLot.rates}원`
                 }`}
-              </div>
+              </h2>
               <div className="w-8 h-8 rotate-45 translate-y-[-1.6rem] bg-neutral-300 self-center"></div>
             </div>
           </CustomOverlayMap>
@@ -128,6 +128,10 @@ export default function MainPage() {
                     position.coords.longitude
                   )
                 );
+                setCurrentCenter({
+                  lat: position.coords.latitude,
+                  lng: position.coords.longitude,
+                });
               },
               () => {
                 alert("현재 위치를 가져올 수 없습니다.");
