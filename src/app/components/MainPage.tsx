@@ -77,7 +77,7 @@ export default function MainPage() {
               lng: parseFloat(parkingLot.lng),
             }}
           >
-            <div className="flex flex-col translate-y-[-25%]">
+            <div className="flex flex-col translate-y-[-25%] select-none">
               <div className="flex justify-center items-center z-10 bg-neutral-300 px-2 h-[2.5rem] text-sm rounded-md">
                 {`기본요금 : ${
                   parkingLot.rates === "무료" ? "무료" : `${parkingLot.rates}원`
