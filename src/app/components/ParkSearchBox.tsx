@@ -38,6 +38,8 @@ export default function ParkSearchBox({ map }: Props) {
       setSearchedPlaces(undefined);
       return;
     }
+    if (!isInputFocused) return;
+    
     ps.keywordSearch(
       debouncedSearchString,
       (data, status, pagenation) => {
