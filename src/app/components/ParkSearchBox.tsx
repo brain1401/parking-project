@@ -69,7 +69,8 @@ export default function ParkSearchBox({ map }: Props) {
           const filteredData = data.filter((place) =>
             place.category_name.includes("공원")
           );
-          filteredData.length > 0 && setSearchedPlaces(filteredData);
+          filteredData.length > 0 ? setSearchedPlaces(filteredData) : setSearchedPlaces(null);
+          
         } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
           setSearchedPlaces(null);
         }
