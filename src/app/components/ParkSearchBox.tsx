@@ -4,6 +4,7 @@ import { CiCircleInfo } from "react-icons/ci";
 import { useEffect, useRef, useState } from "react";
 import { twMerge } from "tailwind-merge";
 import useDebounce from "@/hooks/useDebounce";
+import Link from "next/link";
 
 type Props = {
   map: kakao.maps.Map | undefined;
@@ -106,7 +107,9 @@ export default function ParkSearchBox({ map }: Props) {
           isInputFocused && "border-black"
         )}
       >
-        <CiCircleInfo className="w-6 h-6" />
+        <Link href="/notices">
+          <CiCircleInfo className="w-6 h-6" />
+        </Link>
       </button>
       {searchedPlaces
         ? searchedPlaces.length > 0 && (
