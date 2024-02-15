@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import SearchBox from "./SearchBox";
+import ParkSearchBox from "./ParkSearchBox";
 import useDebounce from "@/hooks/useDebounce";
 import { Map, CustomOverlayMap, MarkerClusterer } from "react-kakao-maps-sdk";
 import useLocation from "@/hooks/useLocation";
@@ -9,8 +9,6 @@ import useGetParkingLot from "@/hooks/useGetParkingLot";
 import { calculateDistance } from "@/utils/calculateDistance";
 
 export default function MainPage() {
-  const [searchString, setSearchString] = useState("");
-
   const [currentCenter, setCurrentCenter] = useState<{
     lat: number | null;
     lng: number | null;
@@ -19,16 +17,15 @@ export default function MainPage() {
     lng: null,
   });
 
-  const debouncedSearchString = useDebounce(searchString, 500);
-
   const { error, latitude, longitude } = useLocation();
+
+  const [map, setMap] = useState<kakao.maps.Map>();
 
   const {
     parkingLotsResponse,
     error: parkingLotError,
     loading,
   } = useGetParkingLot();
-
 
   useEffect(() => {
     // 사용자의 위치 정보가 유효할 때만 currentCenter 상태를 업데이트
@@ -95,10 +92,8 @@ export default function MainPage() {
 
   return (
     <div className="h-full flex flex-col">
-      <SearchBox
-        searchString={searchString}
-        setSearchString={setSearchString}
-      />
+      <ParkSearchBox map={map} />
+
       <Map
         center={{ lat: latitude ?? 35.1599785, lng: longitude ?? 126.8513072 }}
         className="w-[80%] h-[80%] mx-auto"
@@ -107,6 +102,7 @@ export default function MainPage() {
           setCurrentCenter({ lat: center.getLat(), lng: center.getLng() });
         }}
         minLevel={4}
+        onCreate={setMap}
       >
         <MarkerClusterer averageCenter={true} minLevel={3}>
           {visibleMarkers}
