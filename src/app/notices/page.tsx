@@ -7,11 +7,14 @@ export default function NoticePage() {
     <section className="px-[2rem] py-[1rem] ">
       <div className="flex justify-center items-center">
         <h2 className="text-[2.5rem]">유의 사항</h2>
-        <HiBellAlert className="w-[2.5rem] h-[2.5rem]"/>
+        <HiBellAlert className="w-[2.5rem] h-[2.5rem]" />
       </div>
 
       <div className="border-b-[1px] border-black" />
       <ul className="mt-10 flex flex-col justify-center gap-y-5">
+        <li className={NOTICE_LIST_CLASS}>
+          공공데이터를 기반으로 제공되는 정보로, 실제 상황과 다를 수 있습니다.
+        </li>
         <li className={NOTICE_LIST_CLASS}>
           유의사항 미숙지로 발생된 피해는 운전자에게 책임이 있습니다.
         </li>
