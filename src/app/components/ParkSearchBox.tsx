@@ -1,7 +1,7 @@
 "use client";
 import { TbSearch } from "react-icons/tb";
 import { CiCircleInfo } from "react-icons/ci";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { twMerge } from "tailwind-merge";
 import useDebounce from "@/hooks/useDebounce";
 
@@ -20,6 +20,8 @@ export default function ParkSearchBox({ map }: Props) {
     kakao.maps.services.PlacesSearchResult | undefined | null
   >();
 
+  const searchedListRef = useRef<HTMLUListElement>(null);
+
   // input 요소에 포커스가 있을 때 호출될 함수
   const handleFocus = (input: React.FocusEvent<HTMLInputElement, Element>) => {
     setIsInputFocused(true);
@@ -31,6 +33,25 @@ export default function ParkSearchBox({ map }: Props) {
   };
 
   useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        searchedListRef.current &&
+        !searchedListRef.current.contains(event.target as Node)
+      ) {
+        setSearchedPlaces(undefined);
+      }
+    };
+
+    // document에 클릭 이벤트 리스너 추가
+    document.addEventListener("mousedown", handleClickOutside);
+
+    // 클린업 함수에서 이벤트 리스너 제거
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  });
+
+  useEffect(() => {
     if (!map) return;
     const ps = new kakao.maps.services.Places();
 
@@ -39,7 +60,7 @@ export default function ParkSearchBox({ map }: Props) {
       return;
     }
     if (!isInputFocused) return;
-    
+
     ps.keywordSearch(
       debouncedSearchString,
       (data, status, pagenation) => {
@@ -89,7 +110,10 @@ export default function ParkSearchBox({ map }: Props) {
       </button>
       {searchedPlaces
         ? searchedPlaces.length > 0 && (
-            <ul className="flex flex-col absolute left-0 top-[120%] z-20 bg-neutral-100 rounded-md w-full">
+            <ul
+              className="flex flex-col absolute left-0 top-[120%] z-20 bg-neutral-100 rounded-md w-full"
+              ref={searchedListRef}
+            >
               {searchedPlaces.map((place) => (
                 <li key={place.id} className="my-2">
                   <h2
