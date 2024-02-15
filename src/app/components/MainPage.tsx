@@ -29,9 +29,6 @@ export default function MainPage() {
     loading,
   } = useGetParkingLot();
 
-  useEffect(() => {
-    console.log(error, latitude, longitude);
-  }, [error, latitude, longitude]);
 
   useEffect(() => {
     // 사용자의 위치 정보가 유효할 때만 currentCenter 상태를 업데이트
@@ -95,10 +92,6 @@ export default function MainPage() {
         );
       });
   }, [parkingLotsResponse, currentCenter.lat, currentCenter.lng]);
-
-  useEffect(() => {
-    console.log(currentCenter);
-  }, [currentCenter]);
 
   return (
     <div className="h-full flex flex-col">
