@@ -85,7 +85,7 @@ export default function ParkSearchBox({ map }: Props) {
           isInputFocused && "border-black"
         )}
       >
-        <CiCircleInfo />
+        <CiCircleInfo className="w-6 h-6" />
       </button>
       {searchedPlaces
         ? searchedPlaces.length > 0 && (
