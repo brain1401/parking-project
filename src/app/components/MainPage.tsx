@@ -4,7 +4,6 @@ import { useEffect, useMemo, useState } from "react";
 import { BiCurrentLocation } from "react-icons/bi";
 import ParkSearchBox from "./ParkSearchBox";
 import { Map, CustomOverlayMap, MarkerClusterer } from "react-kakao-maps-sdk";
-import useLocation from "@/hooks/useLocation";
 import useGetParkingLot from "@/hooks/useGetParkingLot";
 import { calculateDistance } from "@/utils/calculateDistance";
 
@@ -23,6 +22,25 @@ export default function MainPage() {
     error: parkingLotError,
     loading,
   } = useGetParkingLot();
+
+  const onCurrentLocationClick = () => {
+    if (!navigator.geolocation) {
+      alert("현재 위치를 가져올 수 없습니다.");
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        setCurrentCenter({
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+        });
+      },
+      () => {
+        alert("현재 위치를 가져올 수 없습니다.");
+      }
+    );
+  };
 
   useEffect(() => {
     if (!navigator.geolocation) {
@@ -111,7 +129,6 @@ export default function MainPage() {
             lat: currentCenter.lat ?? 35.1599785,
             lng: currentCenter.lng ?? 126.8513072,
           }}
-          
           className="h-full w-full"
           onCenterChanged={(map) => {
             const center = map.getCenter();
@@ -124,26 +141,12 @@ export default function MainPage() {
             {visibleMarkers}
           </MarkerClusterer>
         </Map>
+        <button className="absolute top-1 left-3 z-10 bg-blue-500 opacity-90 px-2 py-2 rounded-md text-white">
+          거리순으로 보기
+        </button>
         <button
           className="absolute bg-blue-600 opacity-90 text-white bottom-1 right-1 z-10 px-2 py-2 rounded-md"
-          onClick={() => {
-            if (!navigator.geolocation) {
-              alert("현재 위치를 가져올 수 없습니다.");
-              return;
-            }
-
-            navigator.geolocation.getCurrentPosition(
-              (position) => {
-                setCurrentCenter({
-                  lat: position.coords.latitude,
-                  lng: position.coords.longitude,
-                });
-              },
-              () => {
-                alert("현재 위치를 가져올 수 없습니다.");
-              }
-            );
-          }}
+          onClick={onCurrentLocationClick}
         >
           <BiCurrentLocation className="w-5 h-5" />
         </button>
