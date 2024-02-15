@@ -20,8 +20,7 @@ export default function useGetParkingLot() {
         if (axios.isAxiosError(e)) {
           setError(e);
         }
-      }
-      finally {
+      } finally {
         setLoading(false);
       }
     };
@@ -29,5 +28,5 @@ export default function useGetParkingLot() {
     fetchData();
   }, []);
 
-  return {parkingLotsResponse, error, loading};
+  return { parkingLotsResponse, error, loading };
 }

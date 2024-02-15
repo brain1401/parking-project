@@ -29,11 +29,19 @@ export default function MainPage() {
     loading,
   } = useGetParkingLot();
 
-  const mapRef = useRef<kakao.maps.Map>(null);
-
   useEffect(() => {
     console.log(error, latitude, longitude);
   }, [error, latitude, longitude]);
+
+  useEffect(() => {
+    // 사용자의 위치 정보가 유효할 때만 currentCenter 상태를 업데이트
+    if (latitude && longitude) {
+      setCurrentCenter({
+        lat: latitude,
+        lng: longitude,
+      });
+    }
+  }, [latitude, longitude]); // latitude와 longitude가 변경될 때마다 실행
 
   const visibleMarkers = useMemo(() => {
     if (!parkingLotsResponse) return null;
@@ -46,7 +54,8 @@ export default function MainPage() {
           !currentCenter.lat ||
           !currentCenter.lng ||
           !parkingLot.lat ||
-          !parkingLot.lng
+          !parkingLot.lng ||
+          parkingLot.rates === "null"
         )
           return false;
         const distance = calculateDistance(
@@ -75,7 +84,7 @@ export default function MainPage() {
             }}
           >
             <div className="flex flex-col translate-y-[-25%]">
-              <div className="flex justify-center items-center z-10 bg-neutral-300 w-[8rem] h-[2.5rem] text-sm rounded-md">
+              <div className="flex justify-center items-center z-10 bg-neutral-300 px-2 h-[2.5rem] text-sm rounded-md">
                 {`기본요금 : ${
                   parkingLot.rates === "무료" ? "무료" : `${parkingLot.rates}원`
                 }`}
@@ -87,6 +96,10 @@ export default function MainPage() {
       });
   }, [parkingLotsResponse, currentCenter.lat, currentCenter.lng]);
 
+  useEffect(() => {
+    console.log(currentCenter);
+  }, [currentCenter]);
+
   return (
     <div className="h-full flex flex-col">
       <SearchBox
@@ -96,7 +109,6 @@ export default function MainPage() {
       <Map
         center={{ lat: latitude ?? 35.1599785, lng: longitude ?? 126.8513072 }}
         className="w-[80%] h-[80%] mx-auto"
-        ref={mapRef}
         onCenterChanged={(map) => {
           const center = map.getCenter();
           setCurrentCenter({ lat: center.getLat(), lng: center.getLng() });
