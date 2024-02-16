@@ -9,7 +9,6 @@ import { ParkingLotResponse } from "@/types/parkingLot";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import Link from "next/link";
 
 export default function ParkingLotPage({
   params: { id },
@@ -54,7 +53,7 @@ export default function ParkingLotPage({
       </div>
 
       <div className="flex flex-col h-[20%] justify-center w-full border-b border-b-zinc-400">
-        <h3 className="text-lg font-bold flex justify-center items-center w-full h-[3rem] mt-5">
+        <h3 className="text-lg font-bold flex justify-center items-center w-full h-[3rem] my-5">
           {parkingLot?.parkingName}
         </h3>
         <div className="flex flex-col gap-y-2 w-full px-5 mx-auto my-5 ">
