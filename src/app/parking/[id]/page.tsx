@@ -45,18 +45,18 @@ export default function ParkingLotPage({
 
   return (
     <section className="flex flex-col h-full w-full">
-      <div className="relative flex w-full h-[20%]">
+      <div className="relative flex w-full h-[12rem]">
         <Image fill src={PakringLot} className="" alt="parkingLot" />
         <h2 className="z-10 text-yellow-300 font-bold self-center mx-auto">
           공공데이터에서 주차장 사진을 제공하지 않았습니다.
         </h2>
       </div>
 
-      <div className="flex flex-col h-[20%] justify-center w-full border-b border-b-zinc-400">
+      <div className="flex flex-col h-[13rem] justify-center w-full border-b border-b-zinc-400">
         <h3 className="text-lg font-bold flex justify-center items-center w-full h-[3rem] my-5">
           {parkingLot?.parkingName}
         </h3>
-        <div className="flex flex-col gap-y-2 w-full px-5 mx-auto my-5 ">
+        <div className="flex flex-col gap-y-2 w-full px-5 mx-auto py-5 ">
           <div className="flex justify-between">
             <p>주차요금</p>
             <p>기본요금 : {parkingLot?.rates}</p>
