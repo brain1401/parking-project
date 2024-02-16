@@ -1,21 +1,22 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { BiCurrentLocation } from "react-icons/bi";
 import ParkSearchBox from "./ParkSearchBox";
 import { Map, CustomOverlayMap, MarkerClusterer } from "react-kakao-maps-sdk";
 import useGetParkingLot from "@/hooks/useGetParkingLot";
 import { calculateDistance } from "@/utils/calculateDistance";
+import Link from "next/link";
+import useParkingLot from "@/hooks/useParkingLot";
+import useMapInfo from "@/hooks/useMapinfo";
+
+import useFirstSiteAccess from "@/hooks/useFirstSiteAccess";
 
 export default function MainPage() {
-  const [currentCenter, setCurrentCenter] = useState<{
-    lat: number | null;
-    lng: number | null;
-  }>({
-    lat: null,
-    lng: null,
-  });
   const [map, setMap] = useState<kakao.maps.Map>();
+  const { mapCenter, setMapCenter, mapLevel, setMapLevel } = useMapInfo();
+  const { setParkingLot } = useParkingLot();
+  const { isFirstSiteAccess, setFirstSiteAccess } = useFirstSiteAccess();
 
   const {
     parkingLotsResponse,
@@ -23,7 +24,7 @@ export default function MainPage() {
     loading,
   } = useGetParkingLot();
 
-  const onCurrentLocationClick = () => {
+  const onCurrentLocationClick = useCallback(() => {
     if (!navigator.geolocation) {
       alert("현재 위치를 가져올 수 없습니다.");
       return;
@@ -31,35 +32,26 @@ export default function MainPage() {
 
     navigator.geolocation.getCurrentPosition(
       (position) => {
-        setCurrentCenter({
-          lat: position.coords.latitude,
-          lng: position.coords.longitude,
-        });
+        setMapCenter(position.coords.latitude, position.coords.longitude);
       },
       () => {
         alert("현재 위치를 가져올 수 없습니다.");
       }
     );
-  };
+  }, [setMapCenter]);
 
   useEffect(() => {
-    if (!navigator.geolocation) {
-      alert("현재 위치를 가져올 수 없습니다.");
-      return;
+    if (isFirstSiteAccess) {
+      onCurrentLocationClick();
+      setFirstSiteAccess(false);
     }
+  }, [onCurrentLocationClick, setFirstSiteAccess, isFirstSiteAccess]);
 
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        setCurrentCenter({
-          lat: position.coords.latitude,
-          lng: position.coords.longitude,
-        });
-      },
-      () => {
-        alert("현재 위치를 가져올 수 없습니다.");
-      }
-    );
-  }, []);
+  useEffect(() => {
+    if (!parkingLotsResponse) return;
+
+    setParkingLot(parkingLotsResponse?.parkingInfoList);
+  }, [parkingLotsResponse, setParkingLot]);
 
   const visibleMarkers = useMemo(() => {
     if (!parkingLotsResponse) return null;
@@ -68,31 +60,19 @@ export default function MainPage() {
 
     return parkingLotsResponse?.parkingInfoList
       .filter((parkingLot) => {
-        if (
-          !currentCenter.lat ||
-          !currentCenter.lng ||
-          !parkingLot.lat ||
-          !parkingLot.lng ||
-          parkingLot.rates === null
-        )
+        if (!parkingLot.lat || !parkingLot.lng || parkingLot.rates === null)
           return false;
 
         const distance = calculateDistance(
-          currentCenter.lat,
-          currentCenter.lng,
+          mapCenter.lat,
+          mapCenter.lng,
           parseFloat(parkingLot.lat),
           parseFloat(parkingLot.lng)
         );
         return distance <= rangeInKm;
       })
       .map((parkingLot) => {
-        if (
-          !currentCenter.lat ||
-          !currentCenter.lng ||
-          !parkingLot.lat ||
-          !parkingLot.lng
-        )
-          return null;
+        if (!parkingLot.lat || !parkingLot.lng) return null;
 
         return (
           <CustomOverlayMap
@@ -103,21 +83,25 @@ export default function MainPage() {
             }}
           >
             <div className="flex flex-col translate-y-[-25%] select-none">
-              <h2 className="flex justify-center items-center z-10 bg-neutral-300 px-2 h-[2.5rem] text-sm rounded-md">
-                {`기본요금 : ${
-                  parkingLot.rates === "무료" ? "무료" : `${parkingLot.rates}원`
-                }`}
-              </h2>
-              <div className="w-8 h-8 rotate-45 translate-y-[-1.6rem] bg-neutral-300 self-center"></div>
+              <Link
+                href={`/parking/${parkingLot.parkingCode}`}
+                className="flex justify-center items-center z-10 bg-neutral-800 text-white px-2 h-[2.5rem] text-sm rounded-md"
+              >
+                <button>
+                  {`기본요금 : ${
+                    parkingLot.rates === "무료"
+                      ? "무료"
+                      : `${parkingLot.rates}원`
+                  }`}
+                </button>
+              </Link>
+
+              <div className="w-8 h-8 rotate-45 translate-y-[-1.6rem] bg-neutral-800 text-white self-center"></div>
             </div>
           </CustomOverlayMap>
         );
       });
-  }, [parkingLotsResponse, currentCenter]);
-
-  useEffect(() => {
-    console.log("visibleMarkers : ", visibleMarkers);
-  }, [visibleMarkers]);
+  }, [parkingLotsResponse, mapCenter.lat, mapCenter.lng]);
 
   return (
     <div className="h-full flex flex-col">
@@ -126,16 +110,20 @@ export default function MainPage() {
       <div className="w-[80%] h-[80%] self-center relative overflow-hidden">
         <Map
           center={{
-            lat: currentCenter.lat ?? 35.1599785,
-            lng: currentCenter.lng ?? 126.8513072,
+            lat: mapCenter.lat,
+            lng: mapCenter.lng,
           }}
+          level={mapLevel}
           className="h-full w-full"
           onCenterChanged={(map) => {
             const center = map.getCenter();
-            setCurrentCenter({ lat: center.getLat(), lng: center.getLng() });
+            setMapCenter(center.getLat(), center.getLng());
           }}
           minLevel={4}
           onCreate={setMap}
+          onZoomChanged={(map) => {
+            setMapLevel(map.getLevel());
+          }}
         >
           <MarkerClusterer averageCenter={true} minLevel={3}>
             {visibleMarkers}

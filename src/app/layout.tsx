@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import Script from "next/script";
 import type { Viewport } from "next";
+import StoreProvider from "@/provider/StoreProvider";
 
 export const viewport: Viewport = {
   initialScale: 1,
@@ -33,7 +34,9 @@ export default function RootLayout({
           strategy="beforeInteractive"
         />
       </head>
-      <body className={`${inter.className} h-[100dvh] flex flex-col`}>{children}</body>
+      <body className={`${inter.className} h-[100dvh] flex flex-col`}>
+        <StoreProvider>{children}</StoreProvider>
+      </body>
     </html>
   );
 }
