@@ -129,9 +129,12 @@ export default function MainPage() {
             {visibleMarkers}
           </MarkerClusterer>
         </Map>
-        <button className="absolute top-1 left-3 z-10 bg-blue-500 opacity-90 px-2 py-2 rounded-md text-white">
-          거리순으로 보기
-        </button>
+        <Link href={"/nearby"}>
+          <button className="absolute top-1 left-3 z-10 bg-blue-500 opacity-90 px-2 py-2 rounded-md text-white">
+            거리순으로 보기
+          </button>
+        </Link>
+
         <button
           className="absolute bg-blue-600 opacity-90 text-white bottom-1 right-1 z-10 px-2 py-2 rounded-md"
           onClick={onCurrentLocationClick}
