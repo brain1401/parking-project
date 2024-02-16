@@ -13,7 +13,8 @@ export default function NoticePage() {
       <div className="border-b-[1px] border-black" />
       <ul className="mt-10 flex flex-col justify-center gap-y-5">
         <li className={NOTICE_LIST_CLASS}>
-          공공데이터를 기반으로 제공되는 정보로, 실제 상황과 다를 수 있습니다.
+          공공데이터를 기반으로 제공되는 정보로, 모든 주차장의 정보가 포함되어
+          있지 않을 수 있습니다.
         </li>
         <li className={NOTICE_LIST_CLASS}>
           유의사항 미숙지로 발생된 피해는 운전자에게 책임이 있습니다.
