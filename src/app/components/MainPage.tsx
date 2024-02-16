@@ -8,7 +8,7 @@ import useGetParkingLot from "@/hooks/useGetParkingLot";
 import { calculateDistance } from "@/utils/calculateDistance";
 import Link from "next/link";
 import useParkingLot from "@/hooks/useParkingLot";
-import useMapInfo from "@/hooks/useMapinfo";
+import useMapInfo from "@/hooks/useMapInfo";
 
 import useFirstSiteAccess from "@/hooks/useFirstSiteAccess";
 
