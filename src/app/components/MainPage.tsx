@@ -116,7 +116,7 @@ export default function MainPage() {
         
       {isMenuOpen && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-25 z-20"
+          className="fixed inset-0 bg-black bg-opacity-25 z-20 animate-fadeIn"
           onClick={() => setIsMenuOpen(false)}
         ></div>
       )}

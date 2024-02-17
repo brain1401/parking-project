@@ -29,7 +29,7 @@ export default function SideMenu({ setIsMenuOpen }: Props) {
 
   return (
     <div
-      className="absolute z-30 w-[60vw] h-full bg-slate-50 rounded-tr-md rounded-br-md px-3 py-2"
+      className="absolute z-30 w-[60vw] h-full bg-slate-50 rounded-tr-md rounded-br-md px-3 py-2 animate-slideIn"
       ref={menuRef}
     >
       <div className="relative">
