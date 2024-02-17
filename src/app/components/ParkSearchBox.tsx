@@ -1,10 +1,10 @@
 "use client";
 import { TbSearch } from "react-icons/tb";
-import { CiCircleInfo } from "react-icons/ci";
 import { useEffect, useRef, useState } from "react";
 import { twMerge } from "tailwind-merge";
 import useDebounce from "@/hooks/useDebounce";
 import Link from "next/link";
+import { GoQuestion } from "react-icons/go";
 
 type Props = {
   map: kakao.maps.Map | undefined;
@@ -109,7 +109,7 @@ export default function ParkSearchBox({ map }: Props) {
         )}
       >
         <Link href="/notices">
-          <CiCircleInfo className="w-6 h-6" />
+          <GoQuestion className="w-6 h-6" />
         </Link>
       </button>
       {searchedPlaces
