@@ -84,14 +84,21 @@ export default function ParkingLotPage({
           <div className="flex justify-center items-center mr-5">
             <MdOutlineLocationOn className="w-8 h-8" />
           </div>
-          <p>{parkingLot?.addrRoad}</p>
+          <a
+            href={`kakaomap://look?p=${parkingLot?.lat},${parkingLot?.lng}`}
+            target="_blank"
+          >
+            <p>{parkingLot?.addrRoad}</p>
+          </a>
         </div>
 
         <div className="flex items-center">
           <div className="flex justify-center items-center mr-5">
             <FaPhoneAlt className="w-7 h-7" />
           </div>
-          <p>{parkingLot?.tel}</p>
+          <a href={`tel:${parkingLot?.tel}`} target="_blank">
+            <p>{parkingLot?.tel}</p>
+          </a>
         </div>
       </div>
 
