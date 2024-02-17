@@ -3,7 +3,7 @@ import { MdOutlineLocationOn } from "react-icons/md";
 import { FaPhoneAlt } from "react-icons/fa";
 import PakringLot from "/public/parkingLot.jpg";
 
-import useParkingLot from "@/hooks/useParkingLot";
+import useParkingLots from "@/hooks/useParkingLots";
 import { ParkingLotState } from "@/lib/Slices/parkingLotSlice";
 import { ParkingLotResponse } from "@/types/parkingLot";
 import axios from "axios";
@@ -16,7 +16,7 @@ export default function ParkingLotPage({
 }: {
   params: { id: string };
 }) {
-  const { parkingLots } = useParkingLot();
+  const { parkingLots } = useParkingLots();
   const [parkingLot, setParkingLot] = useState<ParkingLotState | undefined>(
     undefined
   );

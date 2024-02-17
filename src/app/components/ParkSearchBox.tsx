@@ -91,7 +91,7 @@ export default function ParkSearchBox({ map }: Props) {
   }, [searchedPlaces]);
 
   return (
-    <div className="flex relative mx-auto w-[80vw] my-2">
+    <div className="flex relative mx-auto w-full my-2">
       <TbSearch className="absolute left-3 top-[.55rem]" />
       <input
         type="text"

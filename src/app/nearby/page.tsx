@@ -2,7 +2,7 @@
 
 import useFirstSiteAccess from "@/hooks/useFirstSiteAccess";
 import useMapInfo from "@/hooks/useMapInfo";
-import useParkingLot from "@/hooks/useParkingLot";
+import useParkingLots from "@/hooks/useParkingLots";
 import { ParkingLotState } from "@/lib/Slices/parkingLotSlice";
 import { ParkingLotResponse } from "@/types/parkingLot";
 import { calculateDistance } from "@/utils/calculateDistance";
@@ -13,7 +13,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 export default function NearByPage() {
-  const { parkingLots: globalParkingLots } = useParkingLot();
+  const { parkingLots: globalParkingLots } = useParkingLots();
 
   const { mapCenter } = useMapInfo();
 

@@ -7,25 +7,25 @@ import {
 } from "@/lib/Slices/parkingLotSlice";
 import { useCallback } from "react";
 import { RootState } from "@/lib/store";
-export default function useParkingLot() {
+export default function useParkingLots() {
   const parkingLots = useAppSelector((state: RootState) => state.parkingLots);
   const dispatch = useAppDispatch();
 
-  const addParkingLot = useCallback(
+  const addParkingLots = useCallback(
     (parkingLot: ParkingLotState) => {
       dispatch(addParkingLotAction(parkingLot));
     },
     [dispatch]
   );
 
-  const removeParkingLot = useCallback(
+  const removeParkingLots = useCallback(
     (parkingLot: ParkingLotState) => {
       dispatch(removeParkingLotAction(parkingLot));
     },
     [dispatch]
   );
 
-  const setParkingLot = useCallback(
+  const setParkingLots = useCallback(
     (parkingLot: ParkingLotState[]) => {
       dispatch(setParkingLotAction(parkingLot));
     },
@@ -34,8 +34,8 @@ export default function useParkingLot() {
 
   return {
     parkingLots,
-    addParkingLot,
-    removeParkingLot,
-    setParkingLot,
+    addParkingLots,
+    removeParkingLots,
+    setParkingLots,
   };
 }
