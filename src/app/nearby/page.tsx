@@ -11,6 +11,7 @@ import formatPrice from "@/utils/formatPrice";
 import axios from "axios";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import Goback from "../components/Goback";
 
 export default function NearByPage() {
   const { parkingLots: globalParkingLots } = useParkingLots();
@@ -137,32 +138,38 @@ export default function NearByPage() {
     );
 
   return (
-    <section>
-      {nearbyParkingLots && nearbyParkingLots.length > 0 ? (
-        <ul className="flex flex-col justify-center items-center">
-          {nearbyParkingLots?.map((lot) => (
-            <li
-              key={lot.nearByParkingLot.parkingCode}
-              className="flex flex-col bg-blue-500 text-white my-2 w-[75vw] rounded-lg px-2 py-2"
-            >
-              <Link href={`/parking/${lot.nearByParkingLot.parkingCode}`}>
-                <div className="relative">
-                  <p className="text-lg font-bold">
-                    {lot.nearByParkingLot.parkingName}
-                  </p>
-                  <p>{lot.nearByParkingLot.addrRoad}</p>
-                  <p>{formatDistance(lot.distance)}</p>
-                  <p className="absolute right-0 bottom-0 font-bold">
-                    {formatPrice(lot.nearByParkingLot.rates)}
-                  </p>
-                </div>
-              </Link>
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <div>주변에 주차장이 없습니다.</div>
-      )}
+    <section className="px-5 py-5">
+      <div className="relative flex flex-col">
+        <Goback className="w-8 h-8 absolute top-0 left-0" />
+        <h1 className="text-[1.5rem] font-bold text-center ">
+          주변 주차장
+        </h1>
+        {nearbyParkingLots && nearbyParkingLots.length > 0 ? (
+          <ul className="flex flex-col justify-center items-center">
+            {nearbyParkingLots?.map((lot) => (
+              <li
+                key={lot.nearByParkingLot.parkingCode}
+                className="flex flex-col bg-blue-500 text-white my-2 w-[75vw] rounded-lg px-2 py-2"
+              >
+                <Link href={`/parking/${lot.nearByParkingLot.parkingCode}`}>
+                  <div className="relative">
+                    <p className="text-lg font-bold">
+                      {lot.nearByParkingLot.parkingName}
+                    </p>
+                    <p>{lot.nearByParkingLot.addrRoad}</p>
+                    <p>{formatDistance(lot.distance)}</p>
+                    <p className="absolute right-0 bottom-0 font-bold">
+                      {formatPrice(lot.nearByParkingLot.rates)}
+                    </p>
+                  </div>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <div>주변에 주차장이 없습니다.</div>
+        )}
+      </div>
     </section>
   );
 }

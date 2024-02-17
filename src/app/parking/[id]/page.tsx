@@ -10,6 +10,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import formatPrice from "@/utils/formatPrice";
+import Goback from "@/app/components/Goback";
 
 export default function ParkingLotPage({
   params: { id },
@@ -47,6 +48,7 @@ export default function ParkingLotPage({
   return (
     <section className="flex flex-col h-full w-full">
       <div className="relative flex w-full h-[12rem]">
+        <Goback className="w-8 h-8 absolute top-5 left-5 z-10 text-white" />
         <Image fill src={PakringLot} className="" alt="parkingLot" />
         <h2 className="z-10 text-yellow-300 font-bold self-center mx-auto">
           공공데이터에서 주차장 사진을 제공하지 않았습니다.
