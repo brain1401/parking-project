@@ -54,6 +54,11 @@ export default function SideMenu({ setIsMenuOpen }: Props) {
             </Link>
           </li>
           <li className={LIST_ITEM_CLASSNAME}>
+            <Link href="/reports" className="flex w-full h-full">
+              신고 내역
+            </Link>
+          </li>
+          <li className={LIST_ITEM_CLASSNAME}>
             <Link href="/info" className="flex w-full h-full">
               정보
             </Link>
