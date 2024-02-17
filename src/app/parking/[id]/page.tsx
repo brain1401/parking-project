@@ -9,6 +9,7 @@ import { ParkingLotResponse } from "@/types/parkingLot";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import formatPrice from "@/utils/formatPrice";
 
 export default function ParkingLotPage({
   params: { id },
@@ -59,7 +60,9 @@ export default function ParkingLotPage({
         <div className="flex flex-col gap-y-2 w-full px-5 mx-auto py-5 ">
           <div className="flex justify-between">
             <p>주차요금</p>
-            <p>기본요금 : {parkingLot?.rates}</p>
+            <p>
+              기본요금 : {parkingLot?.rates && formatPrice(parkingLot.rates)}
+            </p>
           </div>
           <div className="flex justify-between">
             <p>운영시간</p>
