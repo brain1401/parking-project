@@ -104,7 +104,7 @@ export default function MainPage() {
   }, [parkingLotsResponse, mapCenter.lat, mapCenter.lng]);
 
   return (
-    <div className="h-full flex flex-col">
+    <div className="h-full flex flex-col mt-2">
       <ParkSearchBox map={map} />
 
       <div className="w-[80%] h-[80%] self-center relative overflow-hidden">

@@ -152,7 +152,7 @@ export default function NearByPage() {
                   </p>
                   <p>{lot.nearByParkingLot.addrRoad}</p>
                   <p>{formatDistance(lot.distance)}</p>
-                  <p className="absolute right-0 bottom-0">
+                  <p className="absolute right-0 bottom-0 font-bold">
                     {formatPrice(lot.nearByParkingLot.rates)}
                   </p>
                 </div>
