@@ -114,6 +114,9 @@ export default function ParkingLotPage({
           </a>
         </button>
       </div>
+      <p className="text-sm text-center text-gray-600 mt-1">
+        위 버튼은 카카오맵이 설치되어 있어야 작동합니다.
+      </p>
     </section>
   );
 }

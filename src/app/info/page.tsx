@@ -16,7 +16,7 @@ export default function InfoPage() {
         </div>
 
         <div className="flex flex-col flex-1 gap-y-[8rem] justify-center items-center">
-          <div className="text-xl">최근 업데이트 날짜 : 2024-02-17</div>
+          <div className="text-xl">최근 업데이트 날짜 : 2024-02-18</div>
 
           <div className="text-xl">이메일 : brain1401@gmail.com</div>
         </div>
