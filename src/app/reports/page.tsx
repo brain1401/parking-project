@@ -120,20 +120,33 @@ const data = [
 ];
 export default function ReportsPage() {
   return (
-    <section className="flex flex-col w-full h-full px-5 py-5">
-      <Goback className="w-7 h-7 absolute"/>
-      <h1 className="text-lg text-center py-2">신고 내역</h1>
+    <section className="flex flex-col w-full h-full px-5 py-5 bg-gray-100">
+      <Goback className="w-7 h-7 absolute" />
+      <h1 className="text-lg text-center py-2 text-gray-800 font-semibold">
+        신고 내역
+      </h1>
       <div className="rounded-[2.5px] border-b-[5px] border-b-gray-600" />
 
-      <ul className="flex flex-col mt-5 px-2 py-3 rounded-md">
+      <ul className="flex flex-col my-5 px-2 py-3 rounded-md bg-white shadow-lg overflow-y-scroll">
         {data.map((report) => (
-          <li key={report.id} className="flex justify-between my-2">
+          <li
+            key={report.id}
+            className="flex justify-between items-center my-2 bg-gray-50 p-3 rounded-lg"
+          >
             <div>
-              <h2>신고 날짜: {report["신고 날짜"]}</h2>
-              <h2>차량 번호: {report["차량 번호"]}</h2>
-              <h2>신고결과: {report["신고결과"]}</h2>
+              <h2 className="text-sm font-medium text-gray-700">
+                신고 날짜: {report["신고 날짜"]}
+              </h2>
+              <h2 className="text-sm font-medium text-gray-700">
+                차량 번호: {report["차량 번호"]}
+              </h2>
+              <h2 className="text-sm font-medium text-gray-700">
+                신고결과: {report["신고결과"]}
+              </h2>
             </div>
-            <button>자세히</button>
+            <button className="text-white bg-blue-500 hover:bg-blue-700 transition duration-150 ease-in-out rounded-md px-4 py-2 text-xs font-semibold">
+              자세히
+            </button>
           </li>
         ))}
       </ul>
