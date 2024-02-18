@@ -6,7 +6,7 @@ const NOTICE_LIST_CLASS =
 
 export default function NoticePage() {
   return (
-    <section className="p-4 min-h-screen">
+    <section className="p-4 h-full">
       <div className="relative flex flex-col h-full items-center text-sm bg-white rounded-lg p-6">
         <Goback className="w-6 h-6 absolute top-3 left-3 text-blue-500" />
         <div className="flex flex-col justify-center items-center text-center mb-6">
